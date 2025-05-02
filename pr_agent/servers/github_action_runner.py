@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import sys
 from typing import Union
 
 from pr_agent.agent.pr_agent import PRAgent
@@ -37,6 +38,7 @@ async def run_action():
     OPENAI_KEY = os.environ.get('OPENAI_KEY') or os.environ.get('OPENAI.KEY')
     OPENAI_ORG = os.environ.get('OPENAI_ORG') or os.environ.get('OPENAI.ORG')
     GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+    CONFIG__MODEL = os.environ.get('CONFIG__MODEL')
     # get_settings().set("CONFIG.PUBLISH_OUTPUT_PROGRESS", False)
 
     # Check if required environment variables are set
@@ -53,9 +55,9 @@ async def run_action():
     # Set the environment variables in the settings
     if OPENAI_KEY:
         get_settings().set("OPENAI.KEY", OPENAI_KEY)
-    else:
-        # Might not be set if the user is using models not from OpenAI
-        print("OPENAI_KEY not set")
+    elif CONFIG__MODEL is None:
+        # Use config__model if the user is not using an OpenAI model
+        sys.exit(1)
     if OPENAI_ORG:
         get_settings().set("OPENAI.ORG", OPENAI_ORG)
     get_settings().set("GITHUB.USER_TOKEN", GITHUB_TOKEN)
