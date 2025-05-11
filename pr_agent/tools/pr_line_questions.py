@@ -116,7 +116,7 @@ class PR_LineQuestions:
 
             # return if no comment id or file path and line number
             if not (comment_id or (file_path and line_number)):
-                return
+                return ""
             
             # retrieve thread comments
             thread_comments = self.git_provider.get_review_thread_comments(comment_id)
