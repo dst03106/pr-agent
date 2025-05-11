@@ -110,12 +110,14 @@ class PR_LineQuestions:
         file_path = get_settings().get('file_name', '')
         line_number = get_settings().get('line_end', '')
         
-        # early return if any required parameter is missing
-        if not all([comment_id, file_path, line_number]):
-            get_logger().error("Missing required parameters for conversation history")
-            return ""
+        
         
         try:
+
+            # return if no comment id or file path and line number
+            if not (comment_id or (file_path and line_number)):
+                return
+            
             # retrieve thread comments
             thread_comments = self.git_provider.get_review_thread_comments(comment_id)
             
